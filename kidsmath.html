@@ -1,0 +1,244 @@
+<html>
+<head>
+<style>
+body {
+	background-color: none; 
+	font-size:10px;
+	margin: 50px;
+}
+h1   {color: blue;}
+p    {color: blue;}
+td	{
+	color: green;
+	font-size:50px;
+	line-height:60px;
+	border-style: solid;
+	width: 350px;
+	background-color: white;
+
+}
+
+table {
+
+}
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+var vocab = ["abandon", "ability", "able", "abortion", "about", "above", "abroad", "absence", "absolute", "absolutely", "absorb", "abuse", "academic", "accept", "access", "accident", "accompany", "accomplish", "according", "account", "accurate", "accuse", "achieve", "achievement", "acid", "acknowledge", "acquire", "across", "act", "action", "active", "activist", "activity", "actor", "actress", "actual", "actually", "ad", "adapt", "add", "addition", "additional", "address", "adequate", "adjust", "adjustment", "administration", "administrator", "admire", "admission", "admit", "adolescent", "adopt", "adult", "advance", "advanced", "advantage", "adventure", "advertising", "advice", "advise", "adviser", "advocate", "affair", "affect", "afford", "afraid", "African", "African-American", "after", "afternoon", "again", "against", "age", "agency", "agenda", "agent", "aggressive", "ago", "agree", "agreement", "agricultural", "ah", "ahead", "aid", "aide", "AIDS", "aim", "air", "aircraft", "airline", "airport", "album", "alcohol", "alive", "all", "alliance", "allow", "ally", "almost", "alone", "along", "already", "also", "alter", "alternative", "although", "always", "AM", "amazing", "American", "among", "amount", "analysis", "analyst", "analyze", "ancient", "and", "anger", "angle", "angry", "animal", "anniversary", "announce", "annual", "another", "answer", "anticipate", "anxiety", "any", "anybody", "anymore", "anyone", "anything", "anyway", "anywhere", "apart", "apartment", "apparent", "apparently", "appeal", "appear", "appearance", "apple", "application", "apply", "appoint", "appointment", "appreciate", "approach", "appropriate", "approval", "approve", "approximately", "Arab", "architect", "area", "argue", "argument", "arise", "arm", "armed", "army", "around", "arrange", "arrangement", "arrest", "arrival", "arrive", "art", "article", "artist", "artistic", "as", "Asian", "aside", "ask", "asleep", "aspect", "assault", "assert", "assess", "assessment", "asset", "assign", "assignment", "assist", "assistance", "assistant", "associate", "association", "assume", "assumption", "assure", "at", "athlete", "athletic", "atmosphere", "attach", "attack", "attempt", "attend", "attention", "attitude", "attorney", "attract", "attractive", "attribute", "audience", "author", "authority", "auto", "available", "average", "avoid", "award", "aware", "awareness", "away", "awful"];;
+var vocabMeaning = ["放棄", "能力", "能夠", "流產", "關於", "以上", "國外", "缺席", "絕對", "絕對", "吸收", "濫用", "學術的", "接受", "訪問", "事故", "陪", "完成", "根據", "帳戶", "準確", "控告", "實現", "成就", "酸", "確認", "獲得", "跨越", "法案", "行動", "活性", "活動家", "活動", "演員", "演員", "實際", "其實", "廣告", "適應", "加", "加成", "額外", "地址", "充足", "調整", "調整", "行政", "管理員", "欣賞", "入場", "承認", "青少年", "採用", "成人", "提前", "高級", "優點", "冒險", "廣告", "忠告", "勸告", "顧問", "主張", "事務", "影響", "買得起", "害怕", "非洲人", "非裔美國人", "後", "下午", "再次", "反對", "年齡", "機構", "議程", "代理人", "好鬥的", "前", "同意", "協議", "農業的", "啊", "先", "援助", "助手", "艾滋病", "目標", "空氣", "飛機", "航空公司", "飛機場", "專輯", "醇", "活", "所有", "聯盟", "允許", "盟國", "幾乎", "單獨", "沿", "已經", "也", "改變", "另類", "雖然", "總是", "上午", "驚人", "美國人", "其中", "量", "分析", "分析員", "分析", "古", "和", "憤怒", "角度", "憤怒", "動物", "週年", "宣布", "年度", "另一個", "回答", "預料", "焦慮", "任何", "任何人", "不再", "任何人", "任何東西", "無論如何", "任何地方", "分開", "公寓", "明顯的", "顯然地", "上訴", "出現", "出現", "蘋果", "應用", "應用", "委", "約定", "欣賞", "方法", "適當", "認可", "批准", "約", "阿拉伯", "建築師", "區", "爭論", "論據", "出現", "臂", "武裝的", "軍隊", "周圍", "安排", "安排", "逮捕", "到達", "到達", "藝術", "文章", "藝術家", "藝術的", "如", "亞洲人", "在旁邊", "問", "睡著了", "方面", "突擊", "斷言", "評估", "評定", "資產", "分配", "分配", "助攻", "幫助", "助理", "關聯", "協會", "承擔", "假設", "保證", "在", "運動員", "運動的", "大氣層", "連接", "攻擊", "嘗試", "出席", "注意", "態度", "律師", "吸引", "有魅力", "屬性", "聽眾", "作者", "權威", "汽車", "有空", "平均", "避免", "獎", "知道的", "意識", "遠", "可怕"];
+
+var correctOptionId, calAns;
+var questionCount=0, correctCount=0, incorrectCount=0;
+
+var speech = new SpeechSynthesisUtterance();
+
+		speech.volume = 1;
+		speech.rate = 1;
+		speech.pitch = 1;                
+
+
+var voices = speechSynthesis.getVoices();
+
+var minNum1 = 100; /* 10 mean 2 digits */
+var minNum2 = 10; /* 10 mean 2 digits */
+var formula;
+var formulaOper = "+";
+
+function assignAns(calAns, correctOption, optionIdx) {
+
+
+	if (correctOption == optionIdx) {
+		$("#ans"+optionIdx).text(calAns);
+		correctOptionId = "ans"+optionIdx;
+	}
+	else {
+		var wrongAns = "";
+		if (calAns.toString().indexOf("...") == -1) {
+			wrongAns = Math.floor(Math.random() * 10 + 1 + calAns);
+		}
+		else {
+			wrongAns = Math.floor(Math.random() * 10 +1 + calAns.toString().split("...")[0]) + "..." +Math.floor(Math.random() * 10 +1 + calAns.toString().split("...")[1]);		
+
+		}
+		$("#ans"+optionIdx).text(wrongAns);			
+	}
+}
+
+function refreshQuestion(voc) {
+	questionCount++;
+//s	alert(questionCount);
+//, correctCount, incorrectCount
+	calAns = Math.floor(Math.random() * vocab.length);
+
+	var firstNum = Math.floor((Math.random() * minNum1 * 9) + minNum1);
+
+	var secondNum = Math.floor((Math.random() * minNum2 * 9) + minNum2);
+	
+	formula = firstNum + " " + formulaOper + " " + secondNum +" = ?";
+	
+	
+	var calculatedAns;
+
+	switch(formulaOper) {
+		 case "-":
+			calculatedAns = firstNum - secondNum;
+			break;
+		 case "+":
+			calculatedAns = firstNum + secondNum;
+			break;
+			
+		 case "*":
+		 case "x":
+		 case "X":		 
+			calculatedAns = firstNum * secondNum;
+			break;
+
+		 case "/":
+		 	formula = firstNum + " " + "&divide;" + " " + secondNum +" = ?";
+			calculatedAns = (firstNum-(firstNum % secondNum))/secondNum +"..."+ firstNum % secondNum;
+			break;			
+		 default:
+			calculatedAns = 0;
+	} 
+
+//	formula += calculatedAns;
+
+
+	$("#vocab_question").html(formula);
+	
+	var correctOption = Math.floor(Math.random() * 4);
+	
+	for (var i=0; i<4; i++) {
+		assignAns(calculatedAns, correctOption, i);
+	}
+	
+//  alert(voc);
+  return;
+}
+
+$(function() {
+	$(".ans_btn_class").on('click', function() {
+		$(this).attr('disabled', true);
+
+//		alert($(this).val());
+		if ($(this).val() == correctOptionId) {
+//			alert("correct");
+			correctCount++;
+			$("#correct_count").text(correctCount);
+			$("#correct_list").append("|"+formula);
+//			setTimeout(function(){ refreshQuestion("fsadfd"); }, 1500);
+			refreshQuestion("fsadfd");
+		}
+		else {
+//			alert("wrong");
+			incorrectCount++;
+			$("#incorrect_count").text(incorrectCount);			
+			$("#incorrect_list").append("|"+formula);
+
+		}
+		$(this).attr('disabled', false);
+
+		 // do stuff		 
+	});
+	
+	
+	$("#vocab_question").on("click", function () {
+		console.log($(this).text());
+		speech.text = $(this).text();            
+		speech.lang = "en-US";
+		window.speechSynthesis.speak(speech);
+
+	});
+	
+	$(".ans_class").on("click", function () {
+	
+		console.log($(this).text());
+		speech.text = $(this).text();            
+		
+		speech.lang = "en-US";
+		window.speechSynthesis.speak(speech);
+
+		setTimeout(function(){ 
+			speech.lang = "zh-CN";
+			window.speechSynthesis.speak(speech);
+			
+
+		}, 200);
+		
+
+
+	});
+	
+	
+	$(".formulatSetting").on("change", function () {
+
+		minNum1 = $("#setMinNumId1").val(); /* 10 mean 2 digits */
+		minNum2 = $("#setMinNumId2").val(); /* 10 mean 2 digits */
+		
+		formulaOper = $("#setOperId").val(); /* 10 mean 2 digits */
+		refreshQuestion('yes');
+	});
+/*
+	$("select").on("change", function () {
+		message.voice = voices[$(this).val()];
+	});
+
+	$("button").on("click", function () {
+		speechSynthesis.speak(message);
+	});	
+	
+	// Hack around voices bug
+	var interval = setInterval(function () {
+		voices = speechSynthesis.getVoices();
+		if (voices.length) clearInterval(interval); else return;
+
+		for (var i = 0; i < voices.length; i++) {
+			if (i==21) {
+				$("select").append("<option selected value=\"" + i + "\">" + voices[i].name + "</option>");
+			}
+			else {
+				$("select").append("<option value=\"" + i + "\">" + voices[i].name + "</option>");
+			}
+		}
+	}, 10);
+*/	
+	
+});
+
+
+//document.getElementById("demo").innerHTML = myFunction(4, 3);
+</script>
+
+</head>
+<body onload="refreshQuestion('yes');">
+<!--p>
+    <label>Voice
+        <select id="voice"></select>
+    </label>
+</p-->
+
+
+
+<p id="vocab_question" style="font-size:100px;">gfsdgd</p>	
+	<table>
+		<tr>
+			<td><span id="ans0" class="ans_class"></span>&nbsp;&nbsp;&nbsp;&nbsp;<button type="button"class="ans_btn_class" value="ans0">&#9734;</button></td>
+			<td><span id="ans1" class="ans_class"></span>&nbsp;&nbsp;&nbsp;&nbsp;<button type="button"class="ans_btn_class" value="ans1">&#9734;</button></td>
+		</tr>
+		<tr>
+			<td><span id="ans2" class="ans_class"></span>&nbsp;&nbsp;&nbsp;&nbsp;<button type="button"class="ans_btn_class" value="ans2">&#9734;</button></td>
+			<td><span id="ans3" class="ans_class"></span>&nbsp;&nbsp;&nbsp;&nbsp;<button type="button"class="ans_btn_class" value="ans3">&#9734;</button></td>
+		</tr>
+	</table>
+<p style="font-size:30px">Correct:</p><p id="correct_count" style="font-size:30px"></p>
+<p id="correct_list" style="font-size:15px"></p>
+<p style="font-size:30px">Incorrect:</p><p id="incorrect_count" style="font-size:30px"></p>
+<p id="incorrect_list" style="font-size:15px"></p>
+
+	 Minimum for 1st number: <input id="setMinNumId1" class="formulatSetting" type="text" name="settingMinNum1" value="100"/>  
+	 Minimum for 2nd number:  <input id="setMinNumId2" class="formulatSetting" type="text" name="settingMinNum2" value="10"/>
+	 Operator:  <input id="setOperId" class="formulatSetting" type="text" name="settingOper" value="+"/>
+
+</body>
+</html>
